@@ -94,6 +94,13 @@ project/
 │   └── eda.ipynb
 │
 ├── src/
+│   ├── app.py                     # Página principal del dashboard
+│   │
+│   ├── pages/                     # Páginas adicionales de Streamlit
+│   │   ├── 1_Distribucion.py
+│   │   ├── 2_Clases.py
+│   │   └── 3_Correlaciones.py
+│   │
 │   ├── __init__.py
 │   ├── io.py
 │   ├── cleaning.py
