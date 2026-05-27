@@ -1,25 +1,43 @@
 import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+import plotly.express as px
+from utils import load_data
 
-df = pd.read_csv(
-    r"C:\Users\andyv\OneDrive\Desktop\andy\trabajo Andy\EVOLVE\Data science\python\proyecto\data\processed\clean_airline_passenger_satisfaction.csv"
-)
+# Manejo seguro del session_state
+if "df_filtered" not in st.session_state:
+    st.warning("No se han aplicado filtros aún. Usando datos completos.")
+    df = load_data()
+else:
+    df = st.session_state["df_filtered"]
 
 st.title("🛫 Satisfacción por clase")
 
-fig, ax = plt.subplots(figsize=(10, 8))
+fig = px.histogram(
+    df,
+    x="class",
+    color="satisfaction",
+    barmode="group",
+    text_auto=True,
+    title="Satisfacción por clase",
+    color_discrete_sequence=px.colors.qualitative.Pastel
+)
 
-sns.countplot(data=df, x="class", hue="satisfaction", ax=ax)
+fig.update_layout(
+    plot_bgcolor="white",
+    title_x=0.3
+)
 
-for p in ax.patches:
-    height = int(p.get_height())
-    ax.annotate(
-        str(height),
-        (p.get_x() + p.get_width() / 2, height),
-        ha='center',
-        va='bottom'
-    )
+st.plotly_chart(fig, use_container_width=True)
 
-st.pyplot(fig)
+# Boxplot de retrasos por clase
+st.subheader("Retrasos por clase")
+
+fig_box = px.box(
+    df,
+    x="class",
+    y="total_delay",
+    color="class",
+    title="Distribución de retrasos por clase",
+    color_discrete_sequence=px.colors.qualitative.Set2
+)
+
+st.plotly_chart(fig_box, use_container_width=True)

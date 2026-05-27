@@ -1,25 +1,43 @@
 import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+import plotly.express as px
+from utils import load_data
 
-df = pd.read_csv(
-    r"C:\Users\andyv\OneDrive\Desktop\andy\trabajo Andy\EVOLVE\Data science\python\proyecto\data\processed\clean_airline_passenger_satisfaction.csv"
-)
+# Manejo seguro del session_state
+if "df_filtered" not in st.session_state:
+    st.warning("No se han aplicado filtros aún. Usando datos completos.")
+    df = load_data()
+else:
+    df = st.session_state["df_filtered"]
 
 st.title("📊 Distribución de satisfacción")
 
-fig, ax = plt.subplots(figsize=(5, 4))
+# Gráfico interactivo
+fig = px.histogram(
+    df,
+    x="satisfaction",
+    color="satisfaction",
+    text_auto=True,
+    title="Distribución de satisfacción",
+    color_discrete_sequence=px.colors.qualitative.Pastel
+)
 
-sns.countplot(data=df, x="satisfaction", ax=ax)
+fig.update_layout(
+    bargap=0.2,
+    plot_bgcolor="white",
+    title_x=0.3
+)
 
-for p in ax.patches:
-    count = int(p.get_height())
-    ax.annotate(
-        str(count),
-        (p.get_x() + p.get_width() / 2, count),
-        ha='center',
-        va='bottom'
-    )
+st.plotly_chart(fig, use_container_width=True)
 
-st.pyplot(fig)
+# Histograma de edades
+st.subheader("Distribución de edades")
+
+fig_age = px.histogram(
+    df,
+    x="age",
+    nbins=30,
+    title="Distribución de edades",
+    color_discrete_sequence=["#1E88E5"]
+)
+
+st.plotly_chart(fig_age, use_container_width=True)
