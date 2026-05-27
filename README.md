@@ -3,7 +3,11 @@
 ## Objetivo
 
 Analizar la satisfacción de pasajeros de aerolíneas e identificar los factores que influyen en la experiencia del cliente.
-
+Respondemos estas preguntas principales:
+- ¿Influye la clase del vuelo en la satisfacción?
+- ¿Afectan los retrasos a la experiencia del pasajero?
+- ¿Qué servicios reciben mejores valoraciones?
+- ¿Los clientes leales están más satisfechos?
 ---
 
 ## Dataset
@@ -108,11 +112,11 @@ project/
 
 - Los pasajeros de clase Business presentan mayor satisfacción.
 - Los retrasos afectan negativamente a la experiencia del cliente.
-- Los clientes leales muestran mejores niveles de satisfacción.
 - Los servicios mejor valorados son:
   - Seat comfort
   - Inflight entertainment
   - Cleanliness
+- Los clientes leales muestran mejores niveles de satisfacción.
 
 ---
 
