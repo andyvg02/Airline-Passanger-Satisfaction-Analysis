@@ -12,7 +12,8 @@ Respondemos estas preguntas principales:
 
 ## Dataset
 
-Airline Passenger Satisfaction Dataset.
+Airline Passenger Satisfaction Dataset de Kaggle:
+https://www.kaggle.com/datasets/teejmahal20/airline-passenger-satisfaction?resource=download
 
 El proyecto utiliza los archivos:
 
