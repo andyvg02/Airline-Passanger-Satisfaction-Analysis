@@ -1,7 +1,5 @@
 import streamlit as st
 import pandas as pd
-import shap
-import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from utils import load_data
@@ -18,8 +16,8 @@ else:
 st.title("🧠 Explicabilidad del modelo (SHAP)")
 
 st.markdown("""
-Esta página muestra **cómo y por qué** el modelo Random Forest toma decisiones.
-SHAP permite entender la contribución de cada variable en la predicción.
+Si SHAP está instalado, verás explicaciones del modelo.
+Si no está instalado, la página seguirá funcionando sin errores.
 """)
 
 # ---------------------------------------------------------
@@ -40,46 +38,21 @@ model = RandomForestClassifier(n_estimators=200, random_state=42)
 model.fit(X_scaled, y)
 
 # ---------------------------------------------------------
-# SHAP
+# Intentar cargar SHAP
 # ---------------------------------------------------------
-st.subheader("📌 Cálculo de valores SHAP")
+try:
+    import shap
 
-explainer = shap.TreeExplainer(model)
-shap_values = explainer.shap_values(X_scaled)
+    st.success("SHAP cargado correctamente.")
 
-st.success("Valores SHAP calculados correctamente.")
+    explainer = shap.TreeExplainer(model)
+    shap_values = explainer.shap_values(X_scaled)
 
-# ---------------------------------------------------------
-# Importancia global (beeswarm)
-# ---------------------------------------------------------
-st.subheader("🌍 Importancia global de variables")
+    st.subheader("🌍 Importancia global (SHAP)")
+    shap.summary_plot(shap_values[1], X, show=False)
+    st.pyplot(bbox_inches="tight")
 
-st.markdown("Este gráfico muestra qué variables influyen más en el modelo.")
-
-fig_bee = shap.plots.beeswarm(shap_values[1], max_display=15, show=False)
-st.pyplot(bbox_inches="tight")
-
-# ---------------------------------------------------------
-# Importancia media
-# ---------------------------------------------------------
-st.subheader("📊 Importancia media (SHAP)")
-
-shap.summary_plot(shap_values[1], X, plot_type="bar", show=False)
-st.pyplot(bbox_inches="tight")
-
-# ---------------------------------------------------------
-# Explicación individual
-# ---------------------------------------------------------
-st.subheader("🔍 Explicación de una predicción individual")
-
-index = st.slider("Selecciona un pasajero del dataset", 0, len(X)-1, 0)
-
-st.write("Características del pasajero seleccionado:")
-st.dataframe(pd.DataFrame([X.iloc[index]], index=["Valores"]))
-
-st.markdown("### Waterfall de la predicción")
-
-shap_value_single = explainer.shap_values(X_scaled[index:index+1])
-
-shap.plots.waterfall(shap_value_single[1][0], show=False)
-st.pyplot(bbox_inches="tight")
+except Exception as e:
+    st.error("⚠️ SHAP no está instalado o falló al cargar.")
+    st.info("Instala SHAP con:  pip install shap  o  conda install -c conda-forge shap")
+    st.text(str(e))
