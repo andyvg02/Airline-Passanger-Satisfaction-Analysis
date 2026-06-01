@@ -26,7 +26,34 @@ Introduce las características del pasajero y el modelo predecirá si estará **
 df_model = df.copy()
 df_model["target"] = (df_model["satisfaction"] == "satisfied").astype(int)
 
-X = df_model.select_dtypes(include="number").drop(columns=["target"])
+# Eliminar ID si existe
+id_cols = [c for c in df_model.columns if "id" in c.lower() or "unnamed" in c.lower()]
+df_model = df_model.drop(columns=id_cols)
+
+# ---------------------------------------------------------
+# Separar categóricas y numéricas
+# ---------------------------------------------------------
+cat_cols = df_model.select_dtypes(exclude="number").columns.tolist()
+cat_cols.remove("satisfaction")
+
+# Mantener age_group y eliminar age si existe
+if "age" in df_model.columns:
+    df_model = df_model.drop(columns=["age"])
+if "age" in cat_cols:
+    cat_cols.remove("age")
+
+num_cols = df_model.select_dtypes(include="number").columns.tolist()
+num_cols.remove("target")
+
+# Quitar total_delay porque se calcula automáticamente
+if "total_delay" in num_cols:
+    num_cols.remove("total_delay")
+
+# ---------------------------------------------------------
+# One-hot encoding para el modelo
+# ---------------------------------------------------------
+df_encoded = pd.get_dummies(df_model[cat_cols + num_cols], drop_first=True)
+X = df_encoded
 y = df_model["target"]
 
 # Entrenar modelo
@@ -43,28 +70,58 @@ st.subheader("📝 Introduce los valores del pasajero")
 
 inputs = {}
 
-for col in X.columns:
-    min_val = float(df[col].min())
-    max_val = float(df[col].max())
-    mean_val = float(df[col].mean())
+with st.form("form_prediccion"):
+    cols = st.columns(3)
 
-    inputs[col] = st.slider(
-        col.replace("_", " ").capitalize(),
-        min_value=min_val,
-        max_value=max_val,
-        value=mean_val
-    )
+    # -------------------------
+    # CATEGÓRICAS (incluye age_group)
+    # -------------------------
+    for i, col in enumerate(cat_cols):
+        with cols[i % 3]:
+            options = sorted(df[col].dropna().unique())
+            inputs[col] = st.selectbox(
+                col.replace("_", " ").capitalize(),
+                options=options
+            )
 
-# Convertir a dataframe
-input_df = pd.DataFrame([inputs])
+    # -------------------------
+    # NUMÉRICAS (excepto total_delay)
+    # -------------------------
+    for i, col in enumerate(num_cols):
+        min_val = float(df[col].min())
+        max_val = float(df[col].max())
+        mean_val = float(df[col].mean())
 
-# Escalar igual que el entrenamiento
-input_scaled = scaler.transform(input_df)
+        with cols[i % 3]:
+            inputs[col] = st.slider(
+                col.replace("_", " ").capitalize(),
+                min_value=min_val,
+                max_value=max_val,
+                value=mean_val
+            )
+
+    # -------------------------
+    # Cálculo automático del total_delay
+    # -------------------------
+    if "departure_delay" in inputs and "arrival_delay" in inputs:
+        inputs["total_delay"] = inputs["departure_delay"] + inputs["arrival_delay"]
+
+    submitted = st.form_submit_button("🔍 Predecir satisfacción")
 
 # ---------------------------------------------------------
 # Predicción
 # ---------------------------------------------------------
-if st.button("🔍 Predecir satisfacción"):
+if submitted:
+    input_df = pd.DataFrame([inputs])
+
+    # One-hot encoding igual que el entrenamiento
+    input_encoded = pd.get_dummies(input_df)
+    input_encoded = input_encoded.reindex(columns=X.columns, fill_value=0)
+
+    # Escalar
+    input_scaled = scaler.transform(input_encoded)
+
+    # Predicción
     proba = model.predict_proba(input_scaled)[0][1]
     pred = model.predict(input_scaled)[0]
 

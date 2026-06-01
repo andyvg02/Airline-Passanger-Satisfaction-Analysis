@@ -5,7 +5,16 @@ from src.cleaning import clean_data
 from src.features import build_features
 
 from src.utils import assert_columns
-from src.viz import plot_graph
+
+from src.viz import (
+    plot_satisfaction_distribution,
+    plot_satisfaction_by_class,
+    plot_satisfaction_by_customer_type,
+    plot_delay_by_satisfaction,
+    plot_service_scores_by_satisfaction,
+    plot_correlation_matrix,
+    plot_satisfaction_by_age_group
+)
 
 
 def main():
@@ -31,8 +40,16 @@ def main():
         ]
     )
 
-    # Visualization
-    plot_graph(df)
+    # Visualizations
+    print("\nGenerando visualizaciones...")
+
+    plot_satisfaction_distribution(df)
+    plot_satisfaction_by_class(df)
+    plot_satisfaction_by_customer_type(df)
+    plot_delay_by_satisfaction(df)
+    plot_service_scores_by_satisfaction(df)
+    plot_correlation_matrix(df)
+    plot_satisfaction_by_age_group(df)
 
     # Create output folder if it doesn't exist
     OUT_PATH.parent.mkdir(
@@ -51,4 +68,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
     

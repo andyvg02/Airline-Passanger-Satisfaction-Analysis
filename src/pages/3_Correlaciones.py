@@ -9,7 +9,7 @@ if "df_filtered" not in st.session_state:
 else:
     df = st.session_state["df_filtered"]
 
-st.title("🔥 Mapa de correlaciones (completo, sin números)")
+st.title(" Mapa de correlaciones")
 
 # Seleccionar solo variables numéricas
 numeric_df = df.select_dtypes(include="number")

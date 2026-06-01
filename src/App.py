@@ -81,8 +81,8 @@ business_sat = (df_filtered[df_filtered["class"] == "Business"]["satisfaction"] 
 eco_sat = (df_filtered[df_filtered["class"] == "Eco"]["satisfaction"] == "satisfied").mean() * 100
 eco_plus_sat = (df_filtered[df_filtered["class"] == "Eco Plus"]["satisfaction"] == "satisfied").mean() * 100
 
-# Tarjetas visuales
-col1, col2, col3, col4 = st.columns(4)
+# Tarjetas visuales — ahora en dos filas
+col1, col2, col3 = st.columns(3)
 
 col1.metric(
     f"{kpi_color(satisfaction_rate, 75, 50)} Satisfacción global",
@@ -99,9 +99,10 @@ col3.metric(
     f"{delay_mean:.1f} min"
 )
 
-col4.metric(
+# Segunda fila: solo un KPI centrado
+st.metric(
     "📊 Satisfacción por clase",
-    f"B: {business_sat:.0f}% | E+: {eco_plus_sat:.0f}% | E: {eco_sat:.0f}%"
+    f"Business: {business_sat:.0f}% | Economy Plus: {eco_plus_sat:.0f}% | Economy: {eco_sat:.0f}%"
 )
 
 st.markdown("---")
