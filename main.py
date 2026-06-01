@@ -3,7 +3,6 @@ from src.config import TRAIN_PATH, TEST_PATH, OUT_PATH
 from src.io import load_data
 from src.cleaning import clean_data
 from src.features import build_features
-
 from src.utils import assert_columns
 
 from src.viz import (
@@ -19,16 +18,16 @@ from src.viz import (
 
 def main():
 
-    # Load dataset
+    print("\n📥 Cargando dataset...")
     df = load_data(TRAIN_PATH, TEST_PATH)
 
-    # Clean dataset
+    print("🧹 Limpiando datos...")
     df = clean_data(df)
 
-    # Feature engineering
+    print("🧪 Generando nuevas características...")
     df = build_features(df)
 
-    # Validate important columns
+    print("🔍 Validando columnas esenciales...")
     assert_columns(
         df,
         [
@@ -40,9 +39,7 @@ def main():
         ]
     )
 
-    # Visualizations
-    print("\nGenerando visualizaciones...")
-
+    print("\n📊 Generando visualizaciones...")
     plot_satisfaction_distribution(df)
     plot_satisfaction_by_class(df)
     plot_satisfaction_by_customer_type(df)
@@ -51,25 +48,12 @@ def main():
     plot_correlation_matrix(df)
     plot_satisfaction_by_age_group(df)
 
-    # Create output folder if it doesn't exist
-    OUT_PATH.parent.mkdir(
-        parents=True,
-        exist_ok=True
-    )
+    print("\n💾 Guardando dataset limpio...")
+    OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(OUT_PATH, index=False)
 
-    # Export clean dataset
-    df.to_csv(
-        OUT_PATH,
-        index=False
-    )
-
-    print(f"Saved: {OUT_PATH}")
+    print(f"✅ Dataset guardado en: {OUT_PATH}")
 
 
 if __name__ == "__main__":
     main()
-
-
-
-
-    
