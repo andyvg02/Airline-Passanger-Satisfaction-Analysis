@@ -26,3 +26,6 @@ __pycache__/
 # Archivos del sistema
 .DS_Store
 Thumbs.db
+
+#No subir archivos en proceso de edición
+src/in_process/
