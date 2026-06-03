@@ -27,10 +27,10 @@ def load_data(train_path: Path, test_path: Path) -> pd.DataFrame:
         raise FileNotFoundError(f"❌ No se encontró el archivo: {test_path}")
 
     # Carga segura sin asumir index_col
-    train = pd.read_csv(train_path)
-    test = pd.read_csv(test_path)
+    train = pd.read_csv(train_path,index_col=0)
+    test = pd.read_csv(test_path,index_col=0)
 
     # Concatenación robusta
-    df = pd.concat([train, test], ignore_index=True)
+    df = pd.concat([train, test], axis=0)
 
     return df
