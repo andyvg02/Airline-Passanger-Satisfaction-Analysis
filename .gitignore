@@ -22,6 +22,7 @@ __pycache__/
 # Cachés y testing
 .pytest_cache/
 .mypy_cache/
+src/__pycache__/
 
 # Archivos del sistema
 .DS_Store
