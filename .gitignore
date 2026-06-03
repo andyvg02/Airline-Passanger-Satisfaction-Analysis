@@ -1,9 +1,10 @@
 # Entorno virtual
 .venv/
+venv/
 
 # Caché Python
 __pycache__/
-*.pyc
+*.py[cod]
 
 # Jupyter
 .ipynb_checkpoints/
@@ -11,12 +12,17 @@ __pycache__/
 # VS Code
 .vscode/
 
-# Dataset raw
-data/raw/
+# PyCharm
+.idea/
+
+
+# Variables de entorno
+.env
+
+# Cachés y testing
+.pytest_cache/
+.mypy_cache/
 
 # Archivos del sistema
 .DS_Store
 Thumbs.db
-
-__pycache__/
-*.pyc

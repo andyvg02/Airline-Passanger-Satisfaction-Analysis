@@ -30,7 +30,7 @@ El proyecto utiliza los archivos:
 - Matplotlib
 - Seaborn
 - Jupyter Notebook
-
+- Streamlit
 ---
 
 ## Pipeline
@@ -52,7 +52,11 @@ Ejecutar el pipeline principal:
 ```bash
 python main.py
 ```
+Para lanzar el dashboard interactivo:
 
+```bash
+streamlit run src/app.py
+```
 ---
 
 ## Notebook
@@ -94,9 +98,9 @@ project/
 │   └── eda.ipynb
 │
 ├── src/
-│   ├── app.py                     # Página principal del dashboard
+│   ├── app.py                     
 │   │
-│   ├── pages/                     # Páginas adicionales de Streamlit
+│   ├── pages/                     
 │   │   ├── 1_Distribucion.py
 │   │   ├── 2_Clases.py
 │   │   └── 3_Correlaciones.py
@@ -118,16 +122,34 @@ project/
 
 ## Resultados principales
 
-- Los pasajeros de clase Business presentan mayor satisfacción.
-- Los retrasos afectan negativamente a la experiencia del cliente.
-- Los servicios mejor valorados son:
-  - Seat comfort
-  - Inflight entertainment
-  - Cleanliness
-- Los clientes leales muestran mejores niveles de satisfacción.
+¿Influye la clase del vuelo en la satisfacción?
 
+Sí. Los pasajeros que viajan en clase Business presentan los mayores niveles de satisfacción. Aproximadamente el 69% de ellos se declaran satisfechos, frente a valores cercanos al 19% en Economy y al 25% en Economy Plus.
+
+¿Afectan los retrasos a la experiencia del pasajero?
+
+Sí. Los pasajeros insatisfechos acumulan más minutos de retraso que los satisfechos. Los resultados muestran una relación negativa entre el retraso total y la satisfacción del cliente.
+
+¿Qué servicios reciben mejores valoraciones?
+
+Los servicios mejor valorados son:
+
+- Seat Comfort
+- Inflight Entertainment
+- Cleanliness
+
+Además, estos servicios muestran diferencias claras entre pasajeros satisfechos e insatisfechos, lo que indica que son factores importantes en la percepción de calidad.
+
+¿Los clientes leales están más satisfechos?
+
+Sí. Los clientes leales presentan mayores tasas de satisfacción que los clientes ocasionales, lo que sugiere una relación positiva entre fidelización y experiencia de viaje.
+
+
+## Conclusión
+
+La satisfacción de los pasajeros está principalmente relacionada con la calidad de la experiencia ofrecida por la aerolínea. La clase del vuelo y la fidelidad del cliente están asociadas a mayores niveles de satisfacción, mientras que los retrasos afectan negativamente a la percepción del servicio. Entre todos los factores analizados, la comodidad del asiento, el entretenimiento a bordo y la limpieza destacan como los aspectos con mayor impacto en la experiencia del pasajero.
 ---
 
 ## Autor
-
+Andy Vacas
 Proyecto desarrollado para práctica de Data Science & AI.
